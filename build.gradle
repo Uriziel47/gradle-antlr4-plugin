@@ -1,0 +1,59 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+sourceCompatibility = '1.7'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+ext.isSnapshot = project.hasProperty('isSnapshot')
+ext.version = '0.1'
+ext.artifact = 'gradle.antlr4.plugin'
+ext.company = 'org.drunkenmasters'
+
+repositories {
+    maven {
+        name 'default'
+        url project.repo_default
+    }
+    
+    maven {
+        name 'snapshots'
+        url project.repo_snapshots
+    }
+    maven {
+        name 'releases'
+        url project.repo_releases
+    }
+    
+}
+
+dependencies {
+  compile gradleApi()
+  compile localGroovy()
+}
+
+
+uploadArchives {
+    
+    repositories {
+        mavenDeployer {
+            repository(url: project.ext.isSnapshot ? project.repo_snapshots : project.repo_releases) {
+                authentication(userName: project.repo_user, password: project.repo_pwd)
+            }
+            
+            pom {
+                version = 
+                    project.ext.isSnapshot ? 
+                    project.ext.version + '-SNAPSHOT' : 
+                    project.ext.version
+                artifactId = project.ext.artifact
+                groupId = project.ext.company
+            }
+        }
+    }
+}
+
+task testMe() << {
+    println "Is Snapshot: ${project.ext.isSnapshot}"
+}
