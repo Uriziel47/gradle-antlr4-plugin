@@ -13,5 +13,16 @@
       </task-args>
       <task-jvm-args/>
     </task>
+    <task>
+      <display-name>UploadArchives (Snapshot)</display-name>
+      <non-blocking>no</non-blocking>
+      <task-names>
+        <name must-exist="no">uA</name>
+      </task-names>
+      <task-args>
+        <arg>-PisSnapshot=true</arg>
+      </task-args>
+      <task-jvm-args/>
+    </task>
   </common-tasks>
 </gradle-project-properties>

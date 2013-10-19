@@ -8,7 +8,7 @@ sourceCompatibility = '1.7'
 
 ext.isSnapshot = project.hasProperty('isSnapshot')
 ext.version = '0.1'
-ext.artifact = 'gradle.antlr4.plugin'
+ext.artifact = 'gradle.plugin.antlr4'
 ext.company = 'org.drunkenmasters'
 
 repositories {
@@ -31,11 +31,11 @@ repositories {
 dependencies {
   compile gradleApi()
   compile localGroovy()
+  compile 'org.antlr:antlr4:4+'
 }
 
 
 uploadArchives {
-    
     repositories {
         mavenDeployer {
             repository(url: project.ext.isSnapshot ? project.repo_snapshots : project.repo_releases) {
