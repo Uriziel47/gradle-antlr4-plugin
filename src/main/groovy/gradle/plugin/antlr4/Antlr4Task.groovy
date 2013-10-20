@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.List
 
+import org.antlr.v4.Tool
+import gradle.plugin.antlr4.internal.Antlr4Tool
+
 /**
  *
  * @author Work
@@ -32,11 +35,10 @@ class Antlr4Task extends SourceTask {
     
     @TaskAction
     void generate() {
-        LOGGER.info "performing grammar generation $name, $source"
+        def antlr = new Antlr4Tool()
+        antlr.grammarFiles = source
         
-        source.each { curFile ->
-            LOGGER.info "At file: $curFile"
-        }
+        antlr.processGrammars()
     }
     	
 }

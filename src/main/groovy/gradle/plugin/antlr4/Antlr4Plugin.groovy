@@ -62,6 +62,7 @@ class Antlr4Plugin implements Plugin<Project>{
                         DefaultSourceDirectorySet antlr4SourceSet = new DefaultSourceDirectorySet(displayName, fileResolver)
                         antlr4SourceSet.srcDirs(srcDir)
                         antlr4SourceSet.filter.include '**/*.g4'
+                        antlr4SourceSet.filter.include '**/*.g'
                         sourceSet.allSource.source(antlr4SourceSet)
 
                         LOGGER.info "Creating new SourceSet: $srcDir, ${fileResolver == null}"
