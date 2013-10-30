@@ -87,7 +87,7 @@ class Antlr4Plugin implements Plugin<Project>{
                         });
 
                         // 5) Set up the Antlr output directory (adding to javac inputs!)
-                        final String outputDirectoryName = "${project.buildDir}/src-gen/antlr4/${sourceSet.name}"
+                        final String outputDirectoryName = "${project.buildDir}/src-gen/${sourceSet.name}/antlr4"
                         final File outputDirectory = new File(outputDirectoryName)
                         antlrTask.outputDirectory = outputDirectory
                         sourceSet.getJava().srcDir(outputDirectory)
@@ -97,9 +97,7 @@ class Antlr4Plugin implements Plugin<Project>{
                     }
                 });
         
-        project.task('hello') << {
-            println "Hello from project: ${project.name}!"
-        }
+            project.extensions.create('antlr4', Antlr4Extension.class)
     }
 }
 
