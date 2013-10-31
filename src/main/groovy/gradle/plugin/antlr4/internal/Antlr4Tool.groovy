@@ -10,6 +10,7 @@ import org.gradle.api.file.FileCollection
 import org.antlr.v4.tool.ast.GrammarRootAST
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import gradle.plugin.antlr4.Antlr4Extension
 /**
  *
  * @author Work
@@ -19,11 +20,34 @@ class Antlr4Tool extends Tool {
    
     FileCollection grammarFiles
     
+    Antlr4Extension configuration
+  /*  
+    	public String libDirectory;
+	public boolean generate_ATN_dot = false;
+	public String grammarEncoding = null; // use default locale's encoding
+	public String msgFormat = "antlr";
+	public boolean launch_ST_inspector = false;
+	public boolean ST_inspector_wait_for_close = false;
+        public boolean force_atn = false;
+        public boolean log = false;
+	public boolean gen_listener = true;
+	public boolean gen_visitor = false;
+	public boolean gen_dependencies = false;
+	public String genPackage = null;
+	public Map<String, String> grammarOptions = null;
+	public boolean warnings_are_errors = false;
+	public boolean longMessages = false;
+*/
+    
     Antlr4Tool(FileCollection grammarFiles) {
         super(null)
     }
     
     void processGrammars() {
+        if(configuration != null) {
+            setFromConfiguration()
+        }
+        
         def grammarFiles = this.grammarFiles.collect { 
             LOGGER.info "Adding grammarFile: $it.absolutePath"
             it.absolutePath 
@@ -40,5 +64,13 @@ class Antlr4Tool extends Tool {
         }
     }
     
+    private void setFromConfiguration() {
+         genPackage = configuration.packageName
+         grammarEncoding = configuration.encoding
+         libDirectory = configuration.lib
+         msgFormat = configuration.messageFormat
+         gen_listener = configuration.listener
+         gen_visitor = configuration.visitor
+    }
 }
 

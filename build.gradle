@@ -53,7 +53,3 @@ uploadArchives {
         }
     }
 }
-
-task testMe() << {
-    println "Is Snapshot: ${project.ext.isSnapshot}"
-}

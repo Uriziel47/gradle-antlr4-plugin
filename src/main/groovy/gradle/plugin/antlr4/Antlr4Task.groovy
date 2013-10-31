@@ -39,6 +39,7 @@ class Antlr4Task extends SourceTask {
         
         def antlr = new Antlr4Tool()
         antlr.grammarFiles = source
+        antlr.configuration = cfg
         
         antlr.processGrammars()
         
