@@ -7,7 +7,7 @@ sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext.isSnapshot = project.hasProperty('isSnapshot')
-ext.version = '0.1'
+ext.version = '1.0'
 ext.artifact = 'gradle.plugin.antlr4'
 ext.company = 'org.drunkenmasters'
 

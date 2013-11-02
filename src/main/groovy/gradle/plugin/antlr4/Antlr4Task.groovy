@@ -45,8 +45,10 @@ class Antlr4Task extends SourceTask {
         antlr.configuration = cfg
         
         LOGGER.info "Input directory: $inputDirectory"
+        def packageMap = [:]
         
         source.each { curSource ->
+            delegate = project
             LOGGER.info "Source: $curSource"
             def packagePath = getPackagePath(curSource)
             def packageName = getPackageName(packagePath)
@@ -54,13 +56,26 @@ class Antlr4Task extends SourceTask {
             LOGGER.info "Package path: $packagePath"
             LOGGER.info "Package name: $packageName"
             
-            antlr.outputDirectory = "${outputDirectory.absolutePath}\\$packagePath"
-            antlr.genPackage = packageName == '' ? null : packageName
-            antlr.grammarFiles = project.files(project.relativePath(curSource))
-            antlr.processGrammars()
+            if(packageMap.containsKey(packageName)) {
+                packageMap[packageName].source << relativePath(curSource)
+            } else {
+                packageMap.put(
+                    packageName, 
+                    [pName: packageName, pPath: packagePath, source: files(relativePath(curSource))]
+                )
+            }
         }
         
+        LOGGER.info "PackageMap size: ${packageMap.size()}"
         
+        packageMap.values().each { curValue ->
+            LOGGER.info "PackageMap value: $curValue"
+            
+            antlr.outputDirectory = "${outputDirectory.absolutePath}\\$curValue.pPath"
+            antlr.genPackage = curValue.pName == '' ? null : curValue.pName
+            antlr.grammarFiles = curValue.source
+            antlr.processGrammars()
+        }
         
         LOGGER.info "Hello from ANTLR4 Project: $project.name}"
         LOGGER.info "Antlr4.encoding: $cfg.encoding"
