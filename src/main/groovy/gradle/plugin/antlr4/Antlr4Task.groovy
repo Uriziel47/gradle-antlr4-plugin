@@ -55,7 +55,7 @@ class Antlr4Task extends SourceTask {
             LOGGER.info "Package name: $packageName"
             
             antlr.outputDirectory = "${outputDirectory.absolutePath}\\$packagePath"
-            antlr.genPackage = packageName
+            antlr.genPackage = packageName == '' ? null : packageName
             antlr.grammarFiles = project.files(project.relativePath(curSource))
             antlr.processGrammars()
         }
@@ -80,7 +80,7 @@ class Antlr4Task extends SourceTask {
     
     String getPackageName(String packagePath) {
         def packageName = packagePath.replaceAll('\\\\', '.')
-        packageName
+        packageName.trim()
     }
 }
 

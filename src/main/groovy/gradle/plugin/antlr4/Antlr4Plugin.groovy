@@ -65,13 +65,6 @@ class Antlr4Plugin implements Plugin<Project>{
                         antlr4SourceSet.filter.include '**/*.g'
                         sourceSet.allSource.source(antlr4SourceSet)
 
-                        LOGGER.info "Creating new SourceSet: $srcDir, ${fileResolver == null}"
-                        
-                        antlr4SourceSet.getSrcDirs().each { curSrcDir ->
-                            LOGGER.info "SrcDir: $curSrcDir"
-                        }
-                    
-                    
                         final String taskName = sourceSet.getTaskName('generate', 'GrammarSource')
                         Antlr4Task antlrTask = project.tasks.create(taskName, Antlr4Task.class)
                         antlrTask.description = "Processes the $sourceSet.name Antlr grammars."
@@ -88,12 +81,6 @@ class Antlr4Plugin implements Plugin<Project>{
                         });
 
                         // 5) Set up the Antlr output directory (adding to javac inputs!)
-                       /*
-                        final String outputDirectoryName = "src-gen/${sourceSet.name}/antlr4"
-                        final File outputDirectory = new File(outputDirectoryName)
-                        
-                        sourceSet.getJava().srcDir(outputDirectory)
-*/
                         final String srcGenDir = "src-gen/${sourceSet.name}/antlr4"
                         final String srcGenDisplayName = "${sourceSet.displayName} Antlr4 Generated Grammar"
                         DefaultSourceDirectorySet antlr4GenSourceSet = new DefaultSourceDirectorySet(srcGenDisplayName, fileResolver)
@@ -105,22 +92,8 @@ class Antlr4Plugin implements Plugin<Project>{
                         antlrTask.outputDirectory = new File(srcGenDir)
                         sourceSet.getJava().srcDir(antlrTask.outputDirectory)
                         
-                         LOGGER.info "Creating new SourceGenSet: srcGenDir, ${fileResolver == null}"
-                        
-                        antlr4GenSourceSet.getSrcDirs().each { curSrcDir ->
-                            LOGGER.info "SrcGenDir: $curSrcDir"
-                        }
-                        
-                        final String srcGenJavaDir = "src-gen/${sourceSet.name}/antlr4"
-                        final String srcGenJavaDisplayName = "${sourceSet.displayName} Antlr4 Generated JavaSource Grammar"
-                        DefaultSourceDirectorySet antlr4GenJavaSourceSet = new DefaultSourceDirectorySet(srcGenJavaDisplayName, fileResolver)
-                        antlr4GenJavaSourceSet.srcDirs(srcGenJavaDir)
-                        antlr4GenJavaSourceSet.filter.include '**/*.java'
-                        sourceSet.allJava.source(antlr4GenJavaSourceSet)
-                        
-                        
                         // 6) register fact that antlr should be run before compiling
-                        //project.getTasks().getByName(sourceSet.getCompileJavaTaskName()).dependsOn(taskName)
+                        project.getTasks().getByName(sourceSet.getCompileJavaTaskName()).dependsOn(taskName)
                     }
                 });
         
