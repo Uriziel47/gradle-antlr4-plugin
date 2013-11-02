@@ -75,7 +75,7 @@ class Antlr4Plugin implements Plugin<Project>{
                         final String taskName = sourceSet.getTaskName('generate', 'GrammarSource')
                         Antlr4Task antlrTask = project.tasks.create(taskName, Antlr4Task.class)
                         antlrTask.description = "Processes the $sourceSet.name Antlr grammars."
-
+                        antlrTask.group = 'Build'
                         antlrTask.source = antlr4SourceSet
                         antlrTask.inputDirectory = new File(srcDir)
 
@@ -103,6 +103,7 @@ class Antlr4Plugin implements Plugin<Project>{
                         sourceSet.allSource.source(antlr4GenSourceSet)
                         
                         antlrTask.outputDirectory = new File(srcGenDir)
+                        sourceSet.getJava().srcDir(antlrTask.outputDirectory)
                         
                          LOGGER.info "Creating new SourceGenSet: srcGenDir, ${fileResolver == null}"
                         
