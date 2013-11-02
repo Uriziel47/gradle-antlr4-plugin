@@ -11,10 +11,9 @@ package gradle.plugin.antlr4
  */
 class Antlr4Extension {
     String encoding = 'utf-8'
-    String lib = ''
+    String lib = null
     String messageFormat = 'antlr'
     boolean listener = true
     boolean visitor = false
-    String packageName = ''
 }
 

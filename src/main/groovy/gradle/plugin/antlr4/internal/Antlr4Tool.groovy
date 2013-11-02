@@ -41,6 +41,8 @@ class Antlr4Tool extends Tool {
     
     Antlr4Tool(FileCollection grammarFiles) {
         super(null)
+        haveOutputDir = true
+        return_dont_exit = true
     }
     
     void processGrammars() {
@@ -59,13 +61,14 @@ class Antlr4Tool extends Tool {
             
             def g = createGrammar(curGrammarRoot)
             g.fileName = curGrammarRoot.fileName
+            LOGGER.info "Grammar name: $g.name"
+            LOGGER.info "Grammar outdir: $outputDirectory"
             
             process(g, true)
         }
     }
     
     private void setFromConfiguration() {
-         genPackage = configuration.packageName
          grammarEncoding = configuration.encoding
          libDirectory = configuration.lib
          msgFormat = configuration.messageFormat

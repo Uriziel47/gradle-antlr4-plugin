@@ -8,6 +8,7 @@ package gradle.plugin.antlr4
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.slf4j.Logger
@@ -33,26 +34,54 @@ class Antlr4Task extends SourceTask {
     @OutputDirectory
     File outputDirectory
     
+    @InputDirectory
+    File inputDirectory
+    
     @TaskAction
     void generate() {
         Antlr4Extension cfg = project.antlr4
         
         def antlr = new Antlr4Tool()
-        antlr.grammarFiles = source
         antlr.configuration = cfg
         
-        antlr.processGrammars()
+        LOGGER.info "Input directory: $inputDirectory"
         
-        LOGGER.info("Hello from ANTLR4 Project: $project.name}")
-        LOGGER.info("Antlr4.encoding: $cfg.encoding")
-        LOGGER.info("Antlr4.lib: $cfg.lib")
-        LOGGER.info("Antlr4.messageFormat: $cfg.messageFormat")
-        LOGGER.info("Antlr4.listener: $cfg.listener")
-        LOGGER.info("Antlr4.visitor: $cfg.visitor")
-        LOGGER.info("Antlr4.packageName: $cfg.packageName")
-        LOGGER.info("Antlr4.outputDir: $outputDirectory")
+        source.each { curSource ->
+            LOGGER.info "Source: $curSource"
+            def packagePath = getPackagePath(curSource)
+            def packageName = getPackageName(packagePath)
+            
+            LOGGER.info "Package path: $packagePath"
+            LOGGER.info "Package name: $packageName"
+            
+            antlr.outputDirectory = "${outputDirectory.absolutePath}\\$packagePath"
+            antlr.genPackage = packageName
+            antlr.grammarFiles = project.files(project.relativePath(curSource))
+            antlr.processGrammars()
+        }
+        
+        
+        
+        LOGGER.info "Hello from ANTLR4 Project: $project.name}"
+        LOGGER.info "Antlr4.encoding: $cfg.encoding"
+        LOGGER.info "Antlr4.lib: $cfg.lib"
+        LOGGER.info "Antlr4.messageFormat: $cfg.messageFormat"
+        LOGGER.info "Antlr4.listener: $cfg.listener"
+        LOGGER.info "Antlr4.visitor: $cfg.visitor"
+        LOGGER.info "Antlr4.outputDir: $outputDirectory.absolutePath"
     }
     	
+    String getPackagePath(File source) {
+        def packagePath = source.absolutePath - inputDirectory.absolutePath
+        packagePath = packagePath[1..-1]
+        packagePath = packagePath.replaceAll(/(.*)\\.+\.(g4|g)/, '$1')
+        packagePath
+    }
+    
+    String getPackageName(String packagePath) {
+        def packageName = packagePath.replaceAll('\\\\', '.')
+        packageName
+    }
 }
 
 
