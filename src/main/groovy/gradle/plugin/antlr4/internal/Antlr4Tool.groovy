@@ -51,7 +51,7 @@ class Antlr4Tool extends Tool {
         }
         
         def grammarFiles = this.grammarFiles.collect { 
-            LOGGER.info "Adding grammarFile: $it.absolutePath"
+            LOGGER.debug "Adding grammarFile: $it.absolutePath"
             it.absolutePath 
         }
         List<GrammarRootAST> sortedGrammars = sortGrammarByTokenVocab(grammarFiles)
@@ -61,8 +61,8 @@ class Antlr4Tool extends Tool {
             
             def g = createGrammar(curGrammarRoot)
             g.fileName = curGrammarRoot.fileName
-            LOGGER.info "Grammar name: $g.name"
-            LOGGER.info "Grammar outdir: $outputDirectory"
+            LOGGER.debug "Grammar name: $g.name"
+            LOGGER.debug "Grammar outdir: $outputDirectory"
             
             process(g, true)
         }

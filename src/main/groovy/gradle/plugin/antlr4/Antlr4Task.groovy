@@ -44,17 +44,17 @@ class Antlr4Task extends SourceTask {
         def antlr = new Antlr4Tool()
         antlr.configuration = cfg
         
-        LOGGER.info "Input directory: $inputDirectory"
+        LOGGER.debug "Input directory: $inputDirectory"
         def packageMap = [:]
         
         source.each { curSource ->
             delegate = project
-            LOGGER.info "Source: $curSource"
+            LOGGER.debug "Source: $curSource"
             def packagePath = getPackagePath(curSource)
             def packageName = getPackageName(packagePath)
             
-            LOGGER.info "Package path: $packagePath"
-            LOGGER.info "Package name: $packageName"
+            LOGGER.debug "Package path: $packagePath"
+            LOGGER.debug "Package name: $packageName"
             
             if(packageMap.containsKey(packageName)) {
                 packageMap[packageName].source << relativePath(curSource)
@@ -66,10 +66,10 @@ class Antlr4Task extends SourceTask {
             }
         }
         
-        LOGGER.info "PackageMap size: ${packageMap.size()}"
+        LOGGER.debug "PackageMap size: ${packageMap.size()}"
         
         packageMap.values().each { curValue ->
-            LOGGER.info "PackageMap value: $curValue"
+            LOGGER.debug "PackageMap value: $curValue"
             
             antlr.outputDirectory = "${outputDirectory.absolutePath}\\$curValue.pPath"
             antlr.genPackage = curValue.pName == '' ? null : curValue.pName
@@ -77,13 +77,13 @@ class Antlr4Task extends SourceTask {
             antlr.processGrammars()
         }
         
-        LOGGER.info "Hello from ANTLR4 Project: $project.name}"
-        LOGGER.info "Antlr4.encoding: $cfg.encoding"
-        LOGGER.info "Antlr4.lib: $cfg.lib"
-        LOGGER.info "Antlr4.messageFormat: $cfg.messageFormat"
-        LOGGER.info "Antlr4.listener: $cfg.listener"
-        LOGGER.info "Antlr4.visitor: $cfg.visitor"
-        LOGGER.info "Antlr4.outputDir: $outputDirectory.absolutePath"
+        LOGGER.debug "Hello from ANTLR4 Project: $project.name}"
+        LOGGER.debug "Antlr4.encoding: $cfg.encoding"
+        LOGGER.debug "Antlr4.lib: $cfg.lib"
+        LOGGER.debug "Antlr4.messageFormat: $cfg.messageFormat"
+        LOGGER.debug "Antlr4.listener: $cfg.listener"
+        LOGGER.debug "Antlr4.visitor: $cfg.visitor"
+        LOGGER.debug "Antlr4.outputDir: $outputDirectory.absolutePath"
     }
     	
     String getPackagePath(File source) {
