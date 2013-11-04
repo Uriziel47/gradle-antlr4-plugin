@@ -28,13 +28,13 @@ class Antlr4Task extends SourceTask {
     
     private static final Logger LOGGER = LoggerFactory.getLogger Antlr4Task.class
     
-    @InputFiles
+    //@InputFiles
     FileCollection antlrClasspath
     
-    @OutputDirectory
+    //@OutputDirectory
     File outputDirectory
     
-    @InputDirectory
+    //@InputDirectory
     File inputDirectory
     
     @TaskAction
