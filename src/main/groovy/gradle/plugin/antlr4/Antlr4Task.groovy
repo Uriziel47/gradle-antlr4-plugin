@@ -72,8 +72,12 @@ class Antlr4Task extends SourceTask {
             LOGGER.debug "PackageMap value: $curValue"
             
             antlr.outputDirectory = "${outputDirectory.absolutePath}\\$curValue.pPath"
+            File outputDir = new File(antlr.outputDirectory)
+            def created = outputDir.mkdirs()
             antlr.genPackage = curValue.pName == '' ? null : curValue.pName
             antlr.grammarFiles = curValue.source
+            
+            LOGGER.debug "Created directory $antlr.outputDirectory - $created"
             antlr.processGrammars()
         }
         
@@ -87,9 +91,13 @@ class Antlr4Task extends SourceTask {
     }
     	
     String getPackagePath(File source) {
-        def packagePath = source.absolutePath - inputDirectory.absolutePath
+        LOGGER.debug "Source: $source.absolutePath"
+        LOGGER.debug "InputDir: $inputDirectory.absolutePath"
+        def packagePath = source.absolutePath.capitalize() - inputDirectory.absolutePath.capitalize()
         packagePath = packagePath[1..-1]
         packagePath = packagePath.replaceAll(/(.*)\\.+\.(g4|g)/, '$1')
+        
+        LOGGER.debug "PackageDir: $packagePath"
         packagePath
     }
     
