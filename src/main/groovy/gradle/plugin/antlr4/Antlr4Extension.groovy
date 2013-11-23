@@ -15,5 +15,25 @@ class Antlr4Extension {
     String messageFormat = 'antlr'
     boolean listener = true
     boolean visitor = false
+
+    def encoding (String value)  {
+        this.encoding = value
+    }
+
+    def lib(String value) {
+        this.lib = value
+    }
+
+    def messageFormat(String value) {
+        this.messageFormat = value
+    }
+
+    def listener(boolean value) {
+        this.listener = value
+    }
+
+    def visitor(boolean value) {
+        this.visitor = value
+    }
 }
 
