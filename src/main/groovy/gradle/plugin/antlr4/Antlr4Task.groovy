@@ -57,7 +57,7 @@ class Antlr4Task extends SourceTask {
             LOGGER.debug "Package name: $packageName"
             
             if(packageMap.containsKey(packageName)) {
-                packageMap[packageName].source << relativePath(curSource)
+                packageMap[packageName].source += files(relativePath(curSource))
             } else {
                 packageMap.put(
                     packageName, 
