@@ -6,10 +6,10 @@ apply plugin: 'idea'
 sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-ext.isSnapshot = project.hasProperty('isSnapshot')
+ext.isSnapshot = !project.hasProperty('isRelease')
 ext.version = '1.0'
 ext.artifact = 'gradle.plugin.antlr4'
-ext.company = 'org.drunkenmasters'
+ext.company = 'de.drunkenmasters'
 
 repositories {
     maven {
